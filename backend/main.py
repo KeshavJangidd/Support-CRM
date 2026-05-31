@@ -1,0 +1,63 @@
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+from database import engine, Base, get_db
+import models
+import schemas
+from uuid import uuid4
+
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def root():
+    return {"message": "Support CRM API Running"}
+@app.post("/api/tickets")
+def create_ticket(
+    ticket: schemas.TicketCreate,
+    db: Session = Depends(get_db)
+):
+    new_ticket = models.Ticket(
+        ticket_id=str(uuid4())[:8],
+        customer_name=ticket.customer_name,
+        customer_email=ticket.customer_email,
+        subject=ticket.subject,
+        description=ticket.description,
+        status="open"
+    )
+
+    db.add(new_ticket)
+    db.commit()
+    db.refresh(new_ticket)
+
+    return new_ticket
+@app.get("/api/tickets")
+def get_tickets(
+    db: Session = Depends(get_db)
+):
+    return db.query(models.Ticket).all()
+@app.get("/api/tickets/{ticket_id}")
+def get_ticket(
+    ticket_id: str,
+    db: Session = Depends(get_db)
+):
+    ticket = db.query(models.Ticket).filter(
+        models.Ticket.ticket_id == ticket_id
+    ).first()
+
+    if not ticket:
+        raise HTTPException(
+            status_code=404,
+            detail="Ticket not found"
+        )
+
+    return ticket
