@@ -13,14 +13,17 @@ function CreateTicket() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // handles form submission
   const submit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // console.log("creating ticket...", form); // debug
       await api.post("/api/tickets", form);
       setSuccess(true);
-      setTimeout(() => navigate("/"), 2000);
+      setTimeout(() => navigate("/"), 2000); // redirect after 2 seconds
     } catch (err) {
+      // console.error(err); // debug
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -29,19 +32,19 @@ function CreateTicket() {
 
   return (
     <div className="ct-root">
-      {/* Background effects */}
+      {/* background effects */}
       <div className="ct-orb ct-orb-1" />
       <div className="ct-orb ct-orb-2" />
       <div className="ct-grid" />
 
       <div className="ct-wrapper">
-        {/* Back button */}
+        {/* back button */}
         <button className="ct-back" onClick={() => navigate("/")}>
           ← Back to Home
         </button>
 
         <div className="ct-card">
-          {/* Header */}
+          {/* header */}
           <div className="ct-header">
             <div className="ct-icon-wrap">🎫</div>
             <div className="ct-tag">New Request</div>
@@ -54,6 +57,7 @@ function CreateTicket() {
           </div>
 
           {success ? (
+            // success message after creating ticket
             <div className="ct-success">
               <div className="ct-success-icon">✅</div>
               <h2>Ticket Created!</h2>

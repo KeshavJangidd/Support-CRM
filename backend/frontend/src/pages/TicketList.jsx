@@ -6,9 +6,10 @@ function TicketList() {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("all"); // all, open, in_progress, closed
   const [loading, setLoading] = useState(true);
 
+  // fetch all tickets when component mounts
   useEffect(() => {
     api.get("/api/tickets")
       .then((res) => setTickets(res.data))
@@ -16,10 +17,12 @@ function TicketList() {
       .finally(() => setLoading(false));
   }, []);
 
+  // delete a ticket with confirmation
   const handleDelete = async (ticketId) => {
     if (window.confirm("Are you sure you want to delete this ticket?")) {
       try {
         await api.delete(`/api/tickets/${ticketId}`);
+        // remove from local state so it updates instantly
         setTickets(tickets.filter((t) => t.ticket_id !== ticketId));
       } catch {
         alert("Failed to delete ticket");
@@ -27,6 +30,8 @@ function TicketList() {
     }
   };
 
+  // filter and search logic
+  // TODO: maybe move this to the backend later for better performance
   const filtered = tickets.filter((t) => {
     const matchSearch =
       t.customer_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -38,6 +43,7 @@ function TicketList() {
     return matchSearch && matchFilter;
   });
 
+  // returns the right css class for the status badge
   const statusColor = (status) => {
     if (status === "open") return "tl-status-open";
     if (status === "in_progress") return "tl-status-progress";
@@ -45,6 +51,7 @@ function TicketList() {
     return "";
   };
 
+  // returns the display label for status
   const statusLabel = (status) => {
     if (status === "open") return "Open";
     if (status === "in_progress") return "In Progress";
@@ -59,7 +66,7 @@ function TicketList() {
       <div className="ct-grid" />
 
       <div className="tl-wrapper">
-        {/* Header */}
+        {/* header */}
         <div className="tl-header">
           <button className="ct-back" onClick={() => navigate("/")}>← Back to Home</button>
           <div className="tl-title-row">
@@ -74,7 +81,7 @@ function TicketList() {
           </div>
         </div>
 
-        {/* Search + Filter */}
+        {/* search + filter controls */}
         <div className="tl-controls">
           <div className="tl-search-wrap">
             <span className="tl-search-icon">🔍</span>
@@ -98,7 +105,7 @@ function TicketList() {
           </div>
         </div>
 
-        {/* Tickets Table */}
+        {/* tickets table */}
         {loading ? (
           <div className="tl-empty">
             <div className="ct-spinner" style={{ width: 32, height: 32, borderWidth: 3 }} />

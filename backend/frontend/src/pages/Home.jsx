@@ -6,24 +6,28 @@ export default function Home() {
   const navigate = useNavigate();
   const heroRef = useRef(null);
 
+  // this is for the fade in animations when scrolling
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
+            // console.log("element is visible!", entry.target); // debug
           }
         });
       },
       { threshold: 0.1 }
     );
 
+    // observe all elements with the fade-up class
     document.querySelectorAll(".fade-up").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
     <div className="home-root">
+      {/* background decorations */}
       <div className="orb orb-1" />
       <div className="orb orb-2" />
       <div className="orb orb-3" />
@@ -34,6 +38,7 @@ export default function Home() {
         ))}
       </div>
 
+      {/* hero section */}
       <section className="hero" ref={heroRef}>
         <div className="badge fade-up">✦ Next-Gen Customer Support</div>
 
@@ -47,6 +52,7 @@ export default function Home() {
           modern dashboard built for speed and clarity.
         </p>
 
+        {/* buttons */}
         <div className="hero-btns fade-up">
           <button className="cta-btn" onClick={() => navigate("/create")}>
             <span className="btn-glow" />
@@ -59,6 +65,7 @@ export default function Home() {
           </button>
         </div>
 
+        {/* stats bar - just placeholder numbers for now */}
         <div className="stats-bar fade-up">
           <div className="stat">
             <span className="stat-num">12k+</span>
@@ -77,6 +84,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* feature cards */}
       <section className="features">
         <div className="feature-card fade-up" style={{ "--delay": "0s" }}>
           <div className="card-icon-wrap"><span className="card-icon">📋</span></div>
@@ -101,6 +109,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* bottom call to action */}
       <section className="bottom-cta fade-up">
         <div className="bottom-cta-inner">
           <span className="bottom-cta-text">Ready to streamline your support?</span>

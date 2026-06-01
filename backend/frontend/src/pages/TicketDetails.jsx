@@ -12,6 +12,7 @@ function TicketDetails() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // fetch ticket details on mount
   useEffect(() => {
     api.get(`/api/tickets/${id}`)
       .then((res) => {
@@ -23,10 +24,12 @@ function TicketDetails() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // update ticket status and/or notes
   const handleUpdate = async () => {
     setSaving(true);
     try {
       const res = await api.put(`/api/tickets/${id}`, { status, notes });
+      // console.log("update response:", res.data); // debug
       setTicket(res.data);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
@@ -37,6 +40,7 @@ function TicketDetails() {
     }
   };
 
+  // helper to get the right css class for status badge
   const statusColor = (s) => {
     if (s === "open") return "tl-status-open";
     if (s === "in_progress") return "tl-status-progress";
@@ -64,7 +68,7 @@ function TicketDetails() {
         <button className="ct-back" onClick={() => navigate("/tickets")}>← Back to Tickets</button>
 
         <div className="ct-card">
-          {/* Header */}
+          {/* header with ticket id and subject */}
           <div className="td-header">
             <div>
               <div className="ct-tag">Ticket #{ticket.ticket_id}</div>
@@ -79,7 +83,7 @@ function TicketDetails() {
 
           <div className="td-divider" />
 
-          {/* Customer Info */}
+          {/* customer info section */}
           <div className="td-section">
             <div className="td-section-title">Customer Info</div>
             <div className="td-info-grid">
@@ -102,7 +106,7 @@ function TicketDetails() {
 
           <div className="td-divider" />
 
-          {/* Description */}
+          {/* description section */}
           <div className="td-section">
             <div className="td-section-title">Description</div>
             <p className="td-desc">{ticket.description}</p>
@@ -110,7 +114,7 @@ function TicketDetails() {
 
           <div className="td-divider" />
 
-          {/* Update Section */}
+          {/* update section - status and notes */}
           <div className="td-section">
             <div className="td-section-title">Update Ticket</div>
 
