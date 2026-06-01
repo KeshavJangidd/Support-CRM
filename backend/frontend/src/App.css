@@ -611,3 +611,312 @@
   .ct-row { grid-template-columns: 1fr; }
   .ct-title { font-size: 1.8rem; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   TICKET LIST PAGE
+═══════════════════════════════════════════════════════ */
+
+.tl-root {
+  min-height: 100vh;
+  background: #07060f;
+  font-family: 'Outfit', sans-serif;
+  color: #e8e4f0;
+  position: relative;
+  overflow-x: hidden;
+  padding: 40px 24px 80px;
+}
+
+.tl-wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  animation: slideUp 0.6s ease both;
+}
+
+.tl-header { margin-bottom: 36px; }
+
+.tl-title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.tl-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.tl-new-btn {
+  font-size: 0.9rem !important;
+  padding: 12px 28px !important;
+  margin-bottom: 0 !important;
+}
+
+/* Controls */
+.tl-controls {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  align-items: center;
+}
+
+.tl-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+.tl-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+}
+.tl-search {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 13px 18px 13px 42px;
+  color: #e8e4f0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.tl-search::placeholder { color: #4a4468; }
+.tl-search:focus {
+  border-color: rgba(167,139,250,0.5);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+}
+
+.tl-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tl-filter-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #7a6e96;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tl-filter-btn:hover {
+  border-color: rgba(167,139,250,0.4);
+  color: #a78bfa;
+}
+.tl-filter-active {
+  background: rgba(124,58,237,0.2) !important;
+  border-color: rgba(124,58,237,0.5) !important;
+  color: #a78bfa !important;
+}
+
+/* Table */
+.tl-table-wrap {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.tl-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tl-table thead tr {
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.tl-table th {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4a4468;
+  font-weight: 600;
+  padding: 16px 20px;
+  text-align: left;
+}
+.tl-row {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.tl-row:last-child { border-bottom: none; }
+.tl-row:hover { background: rgba(255,255,255,0.02); }
+.tl-table td { padding: 16px 20px; vertical-align: middle; }
+
+.tl-id {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  color: #a78bfa;
+  font-weight: 700;
+}
+.tl-customer {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e8e4f0;
+}
+.tl-email {
+  font-size: 0.78rem;
+  color: #4a4468;
+  margin-top: 2px;
+}
+.tl-subject {
+  font-size: 0.9rem;
+  color: #9d93b8;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tl-date {
+  font-size: 0.8rem;
+  color: #4a4468;
+  white-space: nowrap;
+}
+
+/* Status badges */
+.tl-status {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.tl-status-open {
+  background: rgba(96,165,250,0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(96,165,250,0.3);
+}
+.tl-status-progress {
+  background: rgba(251,191,36,0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251,191,36,0.3);
+}
+.tl-status-closed {
+  background: rgba(52,211,153,0.15);
+  color: #34d399;
+  border: 1px solid rgba(52,211,153,0.3);
+}
+
+.tl-view-btn {
+  background: transparent;
+  border: 1px solid rgba(167,139,250,0.3);
+  color: #a78bfa;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tl-view-btn:hover {
+  background: rgba(167,139,250,0.1);
+  border-color: #a78bfa;
+}
+
+.tl-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: #4a4468;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.tl-count {
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: #4a4468;
+  text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TICKET DETAILS PAGE
+═══════════════════════════════════════════════════════ */
+
+.td-header { margin-bottom: 24px; }
+
+.td-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 24px 0;
+}
+
+.td-section { margin-bottom: 4px; }
+
+.td-section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4a4468;
+  margin-bottom: 16px;
+}
+
+.td-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.td-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.td-info-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4a4468;
+}
+.td-info-value {
+  font-size: 0.95rem;
+  color: #e8e4f0;
+  font-weight: 500;
+}
+
+.td-desc {
+  font-size: 0.95rem;
+  color: #9d93b8;
+  line-height: 1.7;
+  margin: 0;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+/* select styling */
+.ct-input option {
+  background: #1a1730;
+  color: #e8e4f0;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .tl-table thead { display: none; }
+  .tl-table, .tl-table tbody, .tl-row, .tl-table td { display: block; width: 100%; }
+  .tl-row { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .tl-table td { padding: 4px 0; border: none; }
+  .tl-title-row { flex-direction: column; align-items: flex-start; }
+}

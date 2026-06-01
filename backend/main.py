@@ -21,11 +21,9 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "Support CRM API Running"}
+
 @app.post("/api/tickets")
-def create_ticket(
-    ticket: schemas.TicketCreate,
-    db: Session = Depends(get_db)
-):
+def create_ticket(ticket: schemas.TicketCreate, db: Session = Depends(get_db)):
     new_ticket = models.Ticket(
         ticket_id=str(uuid4())[:8],
         customer_name=ticket.customer_name,
@@ -34,30 +32,35 @@ def create_ticket(
         description=ticket.description,
         status="open"
     )
-
     db.add(new_ticket)
     db.commit()
     db.refresh(new_ticket)
-
     return new_ticket
+
 @app.get("/api/tickets")
-def get_tickets(
-    db: Session = Depends(get_db)
-):
+def get_tickets(db: Session = Depends(get_db)):
     return db.query(models.Ticket).all()
+
 @app.get("/api/tickets/{ticket_id}")
-def get_ticket(
-    ticket_id: str,
-    db: Session = Depends(get_db)
-):
+def get_ticket(ticket_id: str, db: Session = Depends(get_db)):
     ticket = db.query(models.Ticket).filter(
         models.Ticket.ticket_id == ticket_id
     ).first()
-
     if not ticket:
-        raise HTTPException(
-            status_code=404,
-            detail="Ticket not found"
-        )
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    return ticket
 
+@app.patch("/api/tickets/{ticket_id}")
+def update_ticket(ticket_id: str, update: schemas.TicketUpdate, db: Session = Depends(get_db)):
+    ticket = db.query(models.Ticket).filter(
+        models.Ticket.ticket_id == ticket_id
+    ).first()
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    if update.status is not None:
+        ticket.status = update.status
+    if update.notes is not None:
+        ticket.notes = update.notes
+    db.commit()
+    db.refresh(ticket)
     return ticket

@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import CreateTicket from "./pages/CreateTicket";
+import TicketList from "./pages/TicketList";
 import TicketDetails from "./pages/TicketDetails";
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateTicket />} />
+        <Route path="/tickets" element={<TicketList />} />
         <Route path="/ticket/:id" element={<TicketDetails />} />
       </Routes>
     </BrowserRouter>

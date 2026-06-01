@@ -11,6 +11,7 @@ class Ticket(Base):
     customer_email = Column(String)
     subject = Column(String)
     description = Column(String)
-    status = Column(String)
+    status = Column(String, default="open")
+    notes = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
