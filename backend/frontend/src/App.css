@@ -928,3 +928,17 @@
   flex-wrap: wrap;
   margin-bottom: 54px;
 }
+.tl-delete-btn {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #ef4444;
+  padding: 7px 10px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.tl-delete-btn:hover {
+  background: rgba(239,68,68,0.2);
+  border-color: #ef4444;
+}

@@ -16,6 +16,17 @@ function TicketList() {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleDelete = async (ticketId) => {
+    if (window.confirm("Are you sure you want to delete this ticket?")) {
+      try {
+        await api.delete(`/api/tickets/${ticketId}`);
+        setTickets(tickets.filter((t) => t.ticket_id !== ticketId));
+      } catch {
+        alert("Failed to delete ticket");
+      }
+    }
+  };
+
   const filtered = tickets.filter((t) => {
     const matchSearch =
       t.customer_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -123,12 +134,19 @@ function TicketList() {
                     <td className="tl-date">
                       {t.created_at ? new Date(t.created_at).toLocaleDateString() : "—"}
                     </td>
-                    <td>
+                    <td style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                       <button
                         className="tl-view-btn"
                         onClick={() => navigate(`/ticket/${t.ticket_id}`)}
                       >
                         View →
+                      </button>
+                      <button
+                        className="tl-delete-btn"
+                        onClick={() => handleDelete(t.ticket_id)}
+                        title="Delete ticket"
+                      >
+                        🗑️
                       </button>
                     </td>
                   </tr>
