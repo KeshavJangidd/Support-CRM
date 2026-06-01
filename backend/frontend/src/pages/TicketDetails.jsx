@@ -26,7 +26,7 @@ function TicketDetails() {
   const handleUpdate = async () => {
     setSaving(true);
     try {
-      const res = await api.patch(`/api/tickets/${id}`, { status, notes });
+      const res = await api.put(`/api/tickets/${id}`, { status, notes });
       setTicket(res.data);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);

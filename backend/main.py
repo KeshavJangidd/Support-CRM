@@ -1,10 +1,11 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from database import engine, Base, get_db
 import models
 import schemas
 from uuid import uuid4
+from typing import Optional
 
 
 Base.metadata.create_all(bind=engine)
@@ -38,8 +39,23 @@ def create_ticket(ticket: schemas.TicketCreate, db: Session = Depends(get_db)):
     return new_ticket
 
 @app.get("/api/tickets")
-def get_tickets(db: Session = Depends(get_db)):
-    return db.query(models.Ticket).all()
+def get_tickets(
+    status: Optional[str] = Query(None),
+    search: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.Ticket)
+    if status:
+        query = query.filter(models.Ticket.status == status.lower())
+    if search:
+        query = query.filter(
+            models.Ticket.customer_name.ilike(f"%{search}%") |
+            models.Ticket.customer_email.ilike(f"%{search}%") |
+            models.Ticket.ticket_id.ilike(f"%{search}%") |
+            models.Ticket.subject.ilike(f"%{search}%") |
+            models.Ticket.description.ilike(f"%{search}%")
+        )
+    return query.all()
 
 @app.get("/api/tickets/{ticket_id}")
 def get_ticket(ticket_id: str, db: Session = Depends(get_db)):
@@ -50,7 +66,7 @@ def get_ticket(ticket_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Ticket not found")
     return ticket
 
-@app.patch("/api/tickets/{ticket_id}")
+@app.put("/api/tickets/{ticket_id}")
 def update_ticket(ticket_id: str, update: schemas.TicketUpdate, db: Session = Depends(get_db)):
     ticket = db.query(models.Ticket).filter(
         models.Ticket.ticket_id == ticket_id
@@ -63,7 +79,8 @@ def update_ticket(ticket_id: str, update: schemas.TicketUpdate, db: Session = De
         ticket.notes = update.notes
     db.commit()
     db.refresh(ticket)
-    return ticket
+    return {"success": True, "updated_at": ticket.updated_at}
+
 @app.delete("/api/tickets/{ticket_id}")
 def delete_ticket(ticket_id: str, db: Session = Depends(get_db)):
     ticket = db.query(models.Ticket).filter(
