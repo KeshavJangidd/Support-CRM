@@ -162,7 +162,6 @@
   box-shadow: 0 0 40px rgba(124,58,237,0.5), 0 0 80px rgba(219,39,119,0.2);
   overflow: hidden;
   transition-delay: 0.3s;
-  margin-bottom: 54px;
 }
 .cta-btn:hover {
   transform: scale(1.05) translateY(-2px);
