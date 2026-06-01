@@ -920,3 +920,11 @@
   .tl-table td { padding: 4px 0; border: none; }
   .tl-title-row { flex-direction: column; align-items: flex-start; }
 }
+.hero-btns {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 54px;
+}
